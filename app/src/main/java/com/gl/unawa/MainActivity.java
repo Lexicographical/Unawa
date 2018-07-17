@@ -1,8 +1,6 @@
 package com.gl.unawa;
 
 import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
@@ -16,13 +14,11 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-import com.gl.unawa.custom.PortraitCameraBridgeViewBase;
 import com.gl.unawa.listeners.CVListener;
 import com.gl.unawa.listeners.GestureListener;
 import com.gl.unawa.listeners.STTListener;
@@ -40,24 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int RESULT_SPEECH = 1;
 
     private static final String TAG = "Unawa::MainActivity";
-
-    private BaseLoaderCallback _baseLoaderCallback = new BaseLoaderCallback(this) {
-        @Override
-        public void onManagerConnected(int status) {
-            switch (status) {
-                case LoaderCallbackInterface.SUCCESS: {
-                    Log.i(TAG, "OpenCV loaded successfully");
-                    // Load ndk built module, as specified in moduleName in build.gradle
-                    // after opencv initialization
-                    System.loadLibrary("native-lib");
-                }
-                break;
-                default: {
-                    super.onManagerConnected(status);
-                }
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupConstants() {
         Constants.listenText = findViewById(R.id.sttTextPreview);
         Constants.cameraBridgeViewBase = findViewById(R.id.cvCameraView);
+        Constants.cameraBridgeViewBase.setCvCameraViewListener(new CVListener());
+        Constants.cameraBridgeViewBase.setVisibility(View.VISIBLE);
         Constants.cameraBridgeViewBase.disableView();
         Constants.cameraView = findViewById(R.id.surface_view);
 
@@ -125,6 +105,28 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Constants.baseLoaderCallback = new BaseLoaderCallback(this) {
+            @Override
+            public void onManagerConnected(int status) {
+                switch (status) {
+                    case LoaderCallbackInterface.SUCCESS: {
+                        Log.i(TAG, "OpenCV loaded successfully");
+                        // Load ndk built module, as specified in moduleName in build.gradle
+                        // after opencv initialization
+                        if (Constants.TAB == Constants.SIGN) {
+                            System.loadLibrary("native-lib");
+                            Constants.cameraBridgeViewBase.enableView();
+                            Log.i("MainActivity", "enabled frame!");
+                        }
+                    }
+                    break;
+                    default: {
+                        super.onManagerConnected(status);
+                    }
+                }
+            }
+        };
 
     }
 
@@ -272,9 +274,12 @@ public class MainActivity extends AppCompatActivity {
         if (Constants.recognizer != null) {
             Constants.recognizer.cancel();
         }
-        if (Constants.TAB != Constants.LISTEN) {
+        if (Constants.TAB == Constants.OCR) {
             CameraUtil.destroyCamera();
             Constants.paused = true;
+        }
+        if (Constants.TAB == Constants.SIGN) {
+            disableCamera();
         }
     }
 
@@ -288,10 +293,10 @@ public class MainActivity extends AppCompatActivity {
         if (Constants.TAB == Constants.SIGN) {
             if (!OpenCVLoader.initDebug()) {
                 Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-                OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, _baseLoaderCallback);
+                OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, Constants.baseLoaderCallback);
             } else {
                 Log.d(TAG, "OpenCV library found inside package. Using it!");
-                _baseLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+                Constants.baseLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
             }
         }
     }
@@ -325,5 +330,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public native void modifyMat(long mattAddr, int[] hsvBounds);
 }

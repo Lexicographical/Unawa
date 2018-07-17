@@ -146,8 +146,9 @@ public class PortraitCameraView extends PortraitCameraBridgeViewBase implements 
                     Log.d(TAG, "Set preview size to " + frameSize.width + "x" + frameSize.height);
                     params.setPreviewSize((int) frameSize.width, (int) frameSize.height);
 
-                    if (!Build.MODEL.equals("GT-I9100"))
+                    if (!Build.MODEL.equals("GT-I9100")) {
                         params.setRecordingHint(true);
+                    }
 
                     List<String> FocusModes = params.getSupportedFocusModes();
                     if (FocusModes != null && FocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
@@ -160,10 +161,11 @@ public class PortraitCameraView extends PortraitCameraBridgeViewBase implements 
                     mFrameWidth = params.getPreviewSize().width;
                     mFrameHeight = params.getPreviewSize().height;
 
-                    if ((getLayoutParams().width == LayoutParams.MATCH_PARENT) && (getLayoutParams().height == LayoutParams.MATCH_PARENT))
+                    if ((getLayoutParams().width == LayoutParams.MATCH_PARENT) && (getLayoutParams().height == LayoutParams.MATCH_PARENT)) {
                         mScale = Math.min(((float) height) / mFrameWidth, ((float) width) / mFrameHeight);
-                    else
+                    } else {
                         mScale = 0;
+                    }
 
                     if (mFpsMeter != null) {
                         mFpsMeter.setResolution(mFrameHeight, mFrameWidth);

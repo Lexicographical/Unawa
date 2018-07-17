@@ -1,26 +1,27 @@
 package com.gl.unawa.listeners;
 
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.core.CvType;
+import com.gl.unawa.Constants;
+import com.gl.unawa.custom.PortraitCameraBridgeViewBase;
+
 import org.opencv.core.Mat;
 
-public class CVListener implements CameraBridgeViewBase.CvCameraViewListener2 {
-
-    private Mat rgba;
-
+public class CVListener implements PortraitCameraBridgeViewBase.CvCameraViewListener2 {
     @Override
     public void onCameraViewStarted(int width, int height) {
-        rgba = new Mat(height, width, CvType.CV_8UC4);
+
     }
 
     @Override
     public void onCameraViewStopped() {
-        rgba.release();
+
     }
 
     @Override
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame frame) {
-        rgba = frame.rgba();
-        return rgba;
+    public Mat onCameraFrame(PortraitCameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        Mat mat = inputFrame.rgba();
+        modifyMat(mat.getNativeObjAddr(), Constants.hsvBounds);
+        return mat;
     }
+
+    public native void modifyMat(long matAddr, int[] hsvBounds);
 }

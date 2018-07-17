@@ -5,10 +5,14 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.gl.unawa.util.CameraUtil;
+
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 public class Utility {
 
@@ -43,26 +47,37 @@ public class Utility {
                 break;
 
             case Constants.SIGN:
-                Constants.cameraBridgeViewBase.disableView();
+                if (Constants.cameraBridgeViewBase != null) {
+                    Constants.cameraBridgeViewBase.disableView();
+                }
                 break;
         }
 
-        if (to == Constants.OCR) {
-            activity.findViewById(R.id.listen).setVisibility(View.GONE);
-            activity.findViewById(R.id.capture).setVisibility(View.VISIBLE);
-            activity.findViewById(R.id.subtitle).setVisibility(View.GONE);
-            activity.findViewById(R.id.surface_view).setVisibility(View.VISIBLE);
-        } else if (to == Constants.SIGN) {
-            activity.findViewById(R.id.listen).setVisibility(View.GONE);
-            activity.findViewById(R.id.capture).setVisibility(View.GONE);
-            activity.findViewById(R.id.subtitle).setVisibility(View.VISIBLE);
-            activity.findViewById(R.id.surface_view).setVisibility(View.GONE);
-        } else {
-            activity.findViewById(R.id.listen).setVisibility(View.VISIBLE);
-            activity.findViewById(R.id.capture).setVisibility(View.GONE);
-            activity.findViewById(R.id.subtitle).setVisibility(View.GONE);
-            activity.findViewById(R.id.surface_view).setVisibility(View.GONE);
+        int[][] ids = {
+                new int[]{R.id.capture, R.id.surface_view},
+                new int[]{R.id.subtitle},
+                new int[]{R.id.listen}
+        };
+
+        for (int i = 0; i < ids.length; i++) {
+            int state = View.GONE;
+            if (to == 1 << i) {
+                state = View.VISIBLE;
+            }
+            for (int j : ids[i]) {
+                activity.findViewById(j).setVisibility(state);
+            }
         }
+        if (to == Constants.SIGN) {
+            if (!OpenCVLoader.initDebug()) {
+                Log.d("OpenCV", "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+                OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, activity, Constants.baseLoaderCallback);
+            } else {
+                Log.d("OpenCV", "OpenCV library found inside package. Using it!");
+                Constants.baseLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            }
+        }
+
     }
 
 }

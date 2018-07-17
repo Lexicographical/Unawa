@@ -60,8 +60,9 @@ public class Constants {
 
 //    OpenCV
     public static MultiDetector multiDetector;
-    public static int[] hsvBounds = {0, 255, 0, 255, 0, 255};
+    public static int[] hsvBounds = {61, 235, 102, 245, 20, 245};
     public static PortraitCameraBridgeViewBase cameraBridgeViewBase;
+    public static BaseLoaderCallback baseLoaderCallback;
 
     public static long lastTime = 0;
     public static int ticks = 0;

@@ -10,7 +10,7 @@ using namespace cv;
 void modifyMatBoundaries(JNIEnv *env, Mat &mat, jintArray hsvBounds);
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_gl_unawa_MainActivity_modifyMat(JNIEnv *env, jobject instance,
+Java_com_gl_unawa_listeners_CVListener_modifyMat(JNIEnv *env, jobject instance,
                                         jlong matAddr, jintArray hsvBounds) {
 
     Mat &mat = *(Mat *) matAddr;

@@ -430,16 +430,16 @@ public abstract class PortraitCameraBridgeViewBase extends SurfaceView implement
 
                 if (mScale != 0) {
                     canvas.drawBitmap(bitmap, new Rect(0,0,bitmap.getWidth(), bitmap.getHeight()),
-                            new Rect((int)((canvas.getWidth() - mScale*bitmap.getWidth()) / 2),
-                                    (int)((canvas.getHeight() - mScale*bitmap.getHeight()) / 2),
-                                    (int)((canvas.getWidth() - mScale*bitmap.getWidth()) / 2 + mScale*bitmap.getWidth()),
-                                    (int)((canvas.getHeight() - mScale*bitmap.getHeight()) / 2 + mScale*bitmap.getHeight())), null);
+                            new Rect(0,
+                                    0,
+                                    (int)(mScale*bitmap.getWidth()),
+                                    (int)(mScale*bitmap.getHeight())), null);
                 } else {
                     canvas.drawBitmap(bitmap, new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()),
-                            new Rect((canvas.getWidth() - bitmap.getWidth()) / 2,
-                                    (canvas.getHeight() - bitmap.getHeight()) / 2,
-                                    (canvas.getWidth() - bitmap.getWidth()) / 2 + bitmap.getWidth(),
-                                    (canvas.getHeight() - bitmap.getHeight()) / 2 + bitmap.getHeight()), null);
+                            new Rect(0,
+                                    0,
+                                    bitmap.getWidth(),
+                                    bitmap.getHeight()), null);
                 }
 
                 if (mFpsMeter != null) {

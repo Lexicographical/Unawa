@@ -17,8 +17,6 @@ import java.io.IOException;
 
 public class CameraUtil {
 
-//    TODO: Make cameraSource stop for SignLanguage so OpenCV can lock canvas of SurfaceView
-
     public static void init(final Activity activity) {
 
         Constants.cameraView = activity.findViewById(R.id.surface_view);
