@@ -33,6 +33,7 @@ public class Constants {
     public static final int REQUEST_CAMERA = 1;
     public static int TAB = 1;
 
+    public static final int NULLTAB = 0;
     public static final int OCR = 1;
     public static final int SIGN = 2;
     public static final int LISTEN = 4;

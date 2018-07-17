@@ -69,23 +69,4 @@ public class CameraUtil {
         }
     }
 
-    public static void setLayoutMode(Activity activity, int tab) {
-        if (tab == Constants.OCR) {
-            activity.findViewById(R.id.listen).setVisibility(View.GONE);
-            activity.findViewById(R.id.speak).setVisibility(View.VISIBLE);
-            activity.findViewById(R.id.subtitle).setVisibility(View.GONE);
-            activity.findViewById(R.id.surface_view).setVisibility(View.VISIBLE);
-        } else if (tab == Constants.SIGN) {
-            activity.findViewById(R.id.listen).setVisibility(View.GONE);
-            activity.findViewById(R.id.speak).setVisibility(View.GONE);
-            activity.findViewById(R.id.subtitle).setVisibility(View.VISIBLE);
-            activity.findViewById(R.id.surface_view).setVisibility(View.GONE);
-        } else {
-            activity.findViewById(R.id.listen).setVisibility(View.VISIBLE);
-            activity.findViewById(R.id.speak).setVisibility(View.GONE);
-            activity.findViewById(R.id.subtitle).setVisibility(View.GONE);
-            activity.findViewById(R.id.surface_view).setVisibility(View.GONE);
-        }
-    }
-
 }

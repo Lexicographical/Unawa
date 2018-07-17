@@ -1,18 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:state_enabled="false"
-        android:drawable="@drawable/button_capture_disabled" />
-    <item
-        android:state_pressed="true"
-        android:state_enabled="true"
-        android:drawable="@drawable/button_capture_enabled" />
-    <item
-        android:state_focused="true"
-        android:state_enabled="true"
-        android:drawable="@drawable/button_capture_disabled" />
-    <item
-        android:state_enabled="true"
-        android:drawable="@drawable/button_capture_disabled" />
-</selector>
+        android:top="@dimen/circlePadding"
+        android:right="@dimen/circlePadding"
+        android:bottom="@dimen/circlePadding"
+        android:left="@dimen/circlePadding">
+        <shape
+            android:shape="oval">
+            <solid android:color="#fff" />
+            <size android:width="50dp"
+                android:height="50dp" />
+        </shape>
+    </item>
+    <item>
+        <shape
+            android:shape="oval">
+            <stroke android:width="2dp"
+                android:color="#ffffff"/>
+        </shape>
+    </item>
+</layer-list>

@@ -1,6 +1,10 @@
 package com.gl.unawa.util;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.SparseArray;
@@ -9,6 +13,7 @@ import android.widget.ImageButton;
 
 import com.gl.unawa.Constants;
 import com.gl.unawa.R;
+import com.gl.unawa.Utility;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
@@ -60,10 +65,12 @@ public class OCR_TTS_Util {
         };
         Constants.tts = new TextToSpeech(activity, listener);
 
-        ImageButton speak = activity.findViewById(R.id.speak);
-        speak.setOnClickListener(new View.OnClickListener() {
+        final ImageButton capture = activity.findViewById(R.id.capture);
+        capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Utility.animateScale(capture);
+
                 Constants.tts.speak(Constants.text, TextToSpeech.QUEUE_ADD, null, "DEFAULT");
             }
         });

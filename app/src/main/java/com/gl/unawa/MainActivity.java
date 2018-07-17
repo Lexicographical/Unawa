@@ -1,6 +1,8 @@
 package com.gl.unawa;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
@@ -57,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-//    TODO: GestureDetector
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             setupGUI();
             OCR_TTS_Util.setup(this);
             CameraUtil.init(this);
-            CameraUtil.setLayoutMode(this, Constants.OCR);
+            Utility.tabTransition(this, Constants.NULLTAB, Constants.TAB);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,6 +107,24 @@ public class MainActivity extends AppCompatActivity {
         Constants.recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
 
         Constants.gestureDetector = new GestureDetector(this, new GestureListener());
+
+        final ImageButton listenButton = findViewById(R.id.startListen);
+        listenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utility.animateScale(listenButton);
+                if (Constants.isListening) {
+                    Toast.makeText(MainActivity.this, "Still listening", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    Utility.requestPermissions(MainActivity.this);
+                    Constants.isListening = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 
@@ -206,27 +224,7 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         Constants.TAB = Constants.OCR;
                 }
-                if (Constants.TAB != Constants.OCR) {
-                    CameraUtil.destroyCamera();
-                }
-                CameraUtil.setLayoutMode(MainActivity.this, Constants.TAB);
-            }
-        });
-
-        ImageButton listenButton = findViewById(R.id.startListen);
-        listenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Constants.isListening) {
-                    Toast.makeText(MainActivity.this, "Still listening", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    Utility.requestPermissions(MainActivity.this);
-                    Constants.isListening = true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Utility.tabTransition(MainActivity.this, old, Constants.TAB);
             }
         });
 
