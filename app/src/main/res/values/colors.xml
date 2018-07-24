@@ -11,6 +11,7 @@
     <color name="soundColor">#69f0ae</color>
     <color name="textColor">#000</color>
     <color name="tabBg">#fff</color>
-    <color name="tabFocus">#69f0ae</color>
+    <color name="tabFocus">#b9f6ca</color>
     <color name="textBg">#bdbdbd</color>
+    <color name="sliderBg">#ffffff</color>
 </resources>

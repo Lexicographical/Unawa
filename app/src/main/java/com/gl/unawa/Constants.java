@@ -6,6 +6,7 @@ import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.view.GestureDetector;
 import android.view.SurfaceView;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -49,7 +50,7 @@ public class Constants {
     public static STTListener listener;
     public static AudioVisualizerView avv;
 
-    //    PTS
+    //    OCR_TTS
     public static SurfaceView cameraView;
     public static CameraSource cameraSource;
     public static TextRecognizer ocrDetector;
@@ -58,13 +59,10 @@ public class Constants {
     public static boolean startup = true;
     public static boolean paused = false;
 
-//    OpenCV
+//    Sign Language
     public static MultiDetector multiDetector;
     public static int[] hsvBounds = {61, 235, 102, 245, 20, 245};
     public static PortraitCameraBridgeViewBase cameraBridgeViewBase;
     public static BaseLoaderCallback baseLoaderCallback;
-
-    public static long lastTime = 0;
-    public static int ticks = 0;
-
+    public static boolean toggleSettings = false;
 }

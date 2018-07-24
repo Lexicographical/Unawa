@@ -416,7 +416,7 @@ public abstract class PortraitCameraBridgeViewBase extends SurfaceView implement
             if (canvas != null) {
                 canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
 
-                Log.d(TAG, String.format("scale: %f, canvas width x height: %d x %d, bitmap width x height:%d x %d ", mScale, canvas.getWidth(), canvas.getHeight(), mCacheBitmap.getWidth(), mCacheBitmap.getHeight()));
+//                Log.d(TAG, String.format("scale: %f, canvas width x height: %d x %d, bitmap width x height:%d x %d ", mScale, canvas.getWidth(), canvas.getHeight(), mCacheBitmap.getWidth(), mCacheBitmap.getHeight()));
 
                 // duddns: Rotate image
                 float degrees = 90f; // for Back Camera

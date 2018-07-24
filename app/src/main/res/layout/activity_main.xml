@@ -7,20 +7,20 @@
     tools:context="com.gl.unawa.MainActivity">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/camera"
+        android:id="@+id/ocr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="50dp"
-        android:orientation="vertical">
+        android:background="@color/tabBg">
 
         <SurfaceView
             android:id="@+id/surface_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/capture"
+            android:id="@+id/ocr_capture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/circleButtonMarginBottom"
@@ -36,43 +36,173 @@
         android:id="@+id/sign"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="50dp"
-        android:background="@color/tabBg"
-        android:orientation="vertical">
+        android:background="@color/tabBg">
 
         <com.gl.unawa.custom.PortraitCameraView
             android:id="@+id/cvCameraView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="60dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/settings"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/subtitle"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="160dp"
             android:background="@color/textBg"
             android:fontFamily="sans-serif"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/sliderContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/sliderBg"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/hLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/hMin"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+
+                    <com.edmodo.rangebar.RangeBar
+                        android:id="@+id/hBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+
+                    <EditText
+                        android:id="@+id/hMax"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </LinearLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/sLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Saturation" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/sMin"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+
+                    <com.edmodo.rangebar.RangeBar
+                        android:id="@+id/sBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+
+                    <EditText
+                        android:id="@+id/sMax"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </LinearLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/vLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Value" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/vMin"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+
+                    <com.edmodo.rangebar.RangeBar
+                        android:id="@+id/vBar"
+                        android:layout_width="0dp"
+                        app:tickCount="16"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+
+                    <EditText
+                        android:id="@+id/vMax"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </LinearLayout>
+            </android.support.constraint.ConstraintLayout>
+
+        </LinearLayout>
+
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/listen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="50dp"
-        android:background="@color/tabBg"
-        android:orientation="vertical"
-        android:weightSum="3">
+        android:background="@color/tabBg">
 
         <com.gl.unawa.custom.AudioVisualizerView
             android:id="@+id/visualizer"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:background="@android:color/transparent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -191,5 +321,4 @@
             app:srcCompat="@mipmap/titleunawa" />
 
     </android.support.constraint.ConstraintLayout>
-
 </android.support.constraint.ConstraintLayout>

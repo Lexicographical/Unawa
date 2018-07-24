@@ -14,7 +14,9 @@ Java_com_gl_unawa_listeners_CVListener_modifyMat(JNIEnv *env, jobject instance,
                                         jlong matAddr, jintArray hsvBounds) {
 
     Mat &mat = *(Mat *) matAddr;
-    modifyMatBoundaries(env, mat, hsvBounds);
+//    cvtColor(mat, mat, COLOR_BGR2GRAY);
+//    cv::Canny(mat, mat, 100, 3, 3);
+//    modifyMatBoundaries(env, mat, hsvBounds);
 
 }
 

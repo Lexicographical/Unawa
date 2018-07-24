@@ -6,7 +6,7 @@
         android:left="@dimen/circlePadding">
         <shape
             android:shape="oval">
-            <solid android:color="#fff" />
+            <solid android:color="#ffffff" />
             <size android:width="50dp"
                 android:height="50dp" />
         </shape>
@@ -15,7 +15,7 @@
         <shape
             android:shape="oval">
             <stroke android:width="2dp"
-                android:color="#ffffff"/>
+                android:color="#fff"/>
         </shape>
     </item>
 </layer-list>
