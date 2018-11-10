@@ -17,16 +17,13 @@ package com.gl.unawa.nn;
 
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
-import android.graphics.Bitmap;
 import android.os.SystemClock;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 
 import com.gl.unawa.Constants;
+import com.gl.unawa.util.Utility;
 
 import org.opencv.core.Mat;
 import org.tensorflow.lite.Interpreter;
@@ -41,7 +38,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +49,6 @@ import java.util.PriorityQueue;
  */
 public abstract class ImageClassifier {
     // Display preferences
-    private static final float GOOD_PROB_THRESHOLD = 0.25f;
     private static final int SMALL_COLOR = 0xffddaa88;
 
     /**
@@ -158,10 +153,11 @@ public abstract class ImageClassifier {
         showInference();
     }
 
-    private static String letter = "A";
-
     private void showInference() {
         for (int i = 0; i < getNumLabels(); ++i) {
+            if (i > 25) {
+                break;
+            }
             sortedLabels.add(
                     new AbstractMap.SimpleEntry<>(labelList.get(i), getNormalizedProbability(i)));
             if (sortedLabels.size() > RESULTS_TO_SHOW) {
@@ -169,10 +165,10 @@ public abstract class ImageClassifier {
             }
         }
 
-        StringBuilder sb = new StringBuilder();
 
         Log.i("ImageClassifier", "settingsMode " + Constants.settingsMode);
         if (Constants.settingsMode == Constants.SETTINGS_OR) {
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 3; i++) {
                 Map.Entry<String, Float> label = sortedLabels.poll();
                 sb.append(String.format(Locale.US, "%s: %4.2f\n", label.getKey(), label.getValue()));
@@ -180,9 +176,32 @@ public abstract class ImageClassifier {
             Constants.subtitle.setText(sb.toString());
         } else {
             Map.Entry<String, Float> label = sortedLabels.poll();
-            if (label.getValue() > GOOD_PROB_THRESHOLD) {
-                sb.append("<h1>" + sortedLabels.poll().getKey() + "</h1>");
-                Constants.subtitle.setText(Html.fromHtml(sb.toString()));
+            Utility.log("ImageClassifier", "Value: " + label.getKey() + ", Probability: " + label.getValue());
+            if (label.getValue() > Constants.GOOD_PROB_THRESHOLD) {
+                Constants.emptyFrameCount = 0;
+                if (label.getKey().equals(Constants.letterCache)) {
+                    Constants.letterFrameCount++;
+                    Utility.log("ImageClassifier", "frameCount: " + Constants.letterFrameCount);
+                } else {
+                    Constants.letterFrameCount = 0;
+                }
+                Constants.preview.setText(label.getKey());
+                if (Constants.letterFrameCount >= Constants.frameThresh) {
+                    Constants.letterFrameCount = 0;
+                    Constants.wordBuilder.append(Constants.letterCache);
+                }
+                Constants.subtitle.setText(Constants.wordBuilder.toString());
+                Constants.letterCache = label.getKey();
+            } else {
+                Constants.preview.setText("");
+                if (label.getValue() < Constants.EMPTY_PROB_THRESHOLD) {
+                    Constants.emptyFrameCount++;
+                    if (Constants.emptyFrameCount >= Constants.frameThresh / 2) {
+                        Constants.emptyFrameCount = 0;
+                        Constants.subtitle.setText("");
+                        Constants.wordBuilder = new StringBuilder();
+                    }
+                }
             }
         }
     }
