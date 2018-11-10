@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.gl.unawa.nn.ImageClassifierASL;
 import com.gl.unawa.util.Util_Camera;
 import com.gl.unawa.util.Util_OCR_TTS;
 import com.gl.unawa.util.Util_Startup;
@@ -24,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int RESULT_SPEECH = 1;
 
     private static final String TAG = "Unawa::MainActivity";
-
-//    TODO: Why does OCR SurfaceView freeze after switch tab?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
         }
         if (Constants.TAB == Constants.SIGN) {
             disableCamera();
+        }
+        if (Constants.classifier != null) {
+            Constants.classifier.close();
         }
     }
 

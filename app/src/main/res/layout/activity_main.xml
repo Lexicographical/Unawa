@@ -47,8 +47,8 @@
             android:id="@+id/settingsButton"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginTop="60dp"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
             android:src="@mipmap/settings"
@@ -61,6 +61,8 @@
             android:layout_height="160dp"
             android:background="@color/textBg"
             android:fontFamily="sans-serif"
+            android:maxLines="5"
+            android:paddingLeft="10dp"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -70,12 +72,21 @@
             android:id="@+id/sliderContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
             android:background="@color/sliderBg"
             android:orientation="vertical"
+            android:padding="@dimen/textBoxPadding"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/settingsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:textSize="20sp" />
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -85,32 +96,17 @@
                     android:id="@+id/hLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hue" />
+                    android:text="Hue"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
+                <org.florescu.android.rangeseekbar.RangeSeekBar
+                    android:id="@+id/hBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/hMin"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-
-                    <com.edmodo.rangebar.RangeBar
-                        android:id="@+id/hBar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-
-                    <EditText
-                        android:id="@+id/hMax"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-                </LinearLayout>
+                    app:layout_constraintLeft_toRightOf="@id/hLabel" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -122,32 +118,17 @@
                     android:id="@+id/sLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Saturation" />
+                    android:text="Saturation"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
+                <org.florescu.android.rangeseekbar.RangeSeekBar
+                    android:id="@+id/sBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/sMin"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-
-                    <com.edmodo.rangebar.RangeBar
-                        android:id="@+id/sBar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-
-                    <EditText
-                        android:id="@+id/sMax"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-                </LinearLayout>
+                    app:layout_constraintLeft_toRightOf="@id/sLabel" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -159,33 +140,18 @@
                     android:id="@+id/vLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Value" />
+                    android:text="Value"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
+                <org.florescu.android.rangeseekbar.RangeSeekBar
+                    android:id="@+id/vBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    app:layout_constraintLeft_toRightOf="@id/vLabel" />
 
-                    <EditText
-                        android:id="@+id/vMin"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-
-                    <com.edmodo.rangebar.RangeBar
-                        android:id="@+id/vBar"
-                        android:layout_width="0dp"
-                        app:tickCount="16"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-
-                    <EditText
-                        android:id="@+id/vMax"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-                </LinearLayout>
             </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
@@ -263,8 +229,8 @@
         android:layout_height="50dp"
         android:background="@color/labelBackground"
         android:fontFamily="sans-serif"
-        android:paddingBottom="10dp"
         android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textColor="@color/labelColor"

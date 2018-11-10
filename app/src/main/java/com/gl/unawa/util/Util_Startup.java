@@ -10,10 +10,14 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gl.unawa.Constants;
@@ -22,9 +26,13 @@ import com.gl.unawa.R;
 import com.gl.unawa.listeners.CVListener;
 import com.gl.unawa.listeners.GestureListener;
 import com.gl.unawa.listeners.STTListener;
+import com.gl.unawa.nn.ImageClassifierASL;
 
+import org.florescu.android.rangeseekbar.RangeSeekBar;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
+
+import java.io.IOException;
 
 public class Util_Startup {
 
@@ -135,10 +143,11 @@ public class Util_Startup {
     public static void setupConstants(final AppCompatActivity activity) {
         Constants.listenText = activity.findViewById(R.id.sttTextPreview);
         Constants.cameraBridgeViewBase = activity.findViewById(R.id.cvCameraView);
-        Constants.cameraBridgeViewBase.setCvCameraViewListener(new CVListener());
+        Constants.cameraBridgeViewBase.setCvCameraViewListener(new CVListener(activity));
         Constants.cameraBridgeViewBase.setVisibility(View.VISIBLE);
         Constants.cameraBridgeViewBase.disableView();
         Constants.cameraView = activity.findViewById(R.id.surface_view);
+        Constants.subtitle = activity.findViewById(R.id.subtitle);
 
         Constants.tabHost = activity.findViewById(R.id.tabHost);
         Constants.tabHost.setup();
@@ -201,11 +210,33 @@ public class Util_Startup {
             }
         };
 
+        final int[] bars = {R.id.hBar, R.id.sBar, R.id.vBar};
+        for (int i = 0; i < 3; i++) {
+            int bar = bars[i];
+            RangeSeekBar<Integer> range = activity.findViewById(bar);
+            range.setTextAboveThumbsColor(R.color.textColor);
+            range.setRangeValues(0, 255);
+            final int j = i;
+            range.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+                @Override
+                public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+                    Utility.log("RangeSeekBar", "Low: " + minValue + " High: " + maxValue);
+                    if (Constants.settingsMode == Constants.SETTINGS_RED) {
+                        Constants.hsvBounds_Red[2 * j] = minValue;
+                        Constants.hsvBounds_Red[2 * j + 1] = maxValue;
+                    } else if (Constants.settingsMode == Constants.SETTINGS_GREEN) {
+                        Constants.hsvBounds_Green[2 * j] = minValue;
+                        Constants.hsvBounds_Green[2 * j + 1] = maxValue;
+                    }
+                }
+            });
+        }
+
         final ImageButton settingsButton = activity.findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                settingsButton.animate().rotation(180).setDuration(500).setListener(new Animator.AnimatorListener() {
+                settingsButton.animate().rotation(90).setDuration(250).setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
                     }
@@ -225,11 +256,33 @@ public class Util_Startup {
 
                     }
                 });
-                Constants.toggleSettings = !Constants.toggleSettings;
-                activity.findViewById(R.id.subtitle).setVisibility(Constants.toggleSettings ? View.GONE : View.VISIBLE);
-                activity.findViewById(R.id.sliderContainer).setVisibility(Constants.toggleSettings ? View.VISIBLE : View.GONE);
+                Constants.settingsMode = (Constants.settingsMode + 1) % 3;
+                activity.findViewById(R.id.subtitle).setVisibility(Constants.settingsMode <= Constants.SETTINGS_OR ? View.VISIBLE : View.GONE);
+                activity.findViewById(R.id.sliderContainer).setVisibility(Constants.settingsMode >= Constants.SETTINGS_GREEN ? View.VISIBLE : View.GONE);
+                TextView settingsLabel = activity.findViewById(R.id.settingsLabel);
+                if (Constants.settingsMode == Constants.SETTINGS_RED) {
+                    settingsLabel.setText("Red Gloves Calibration");
+                } else {
+                    settingsLabel.setText("Green Gloves Calibration");
+                }
+                for (int i = 0; i < 3; i++) {
+                    int bar = bars[i];
+                    RangeSeekBar<Integer> range = activity.findViewById(bar);
+                    int[] hsvBounds = Constants.hsvBounds_Red;
+                    if (Constants.settingsMode == Constants.SETTINGS_GREEN) {
+                        hsvBounds = Constants.hsvBounds_Green;
+                    }
+                    range.setSelectedMinValue(hsvBounds[2 * i]);
+                    range.setSelectedMaxValue(hsvBounds[2 * i + 1]);
+                }
             }
         });
+        try {
+            Constants.classifier = new ImageClassifierASL(activity);
+        } catch (IOException e) {
+            Log.i("Util::Startup", "Classifier was not initialized");
+            e.printStackTrace();
+        }
 
     }
 

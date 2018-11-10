@@ -31,6 +31,10 @@ android {
             jniLibs.srcDirs = ['src/main/jniLibs']
         }
     }
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
 }
 
 dependencies {
@@ -41,7 +45,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.android.gms:play-services-vision:15.0.2'
-    implementation 'org.tensorflow:tensorflow-android:1.8.0'
     implementation 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
     implementation project(':openCVLibrary341')
+    //implementation 'org.tensorflow:tensorflow-lite:1.9.0'
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
 }

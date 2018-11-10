@@ -42,6 +42,8 @@ public class Util_OCR_TTS {
                             sb.append("\n");
                         }
                         Constants.text = sb.toString();
+                    } else {
+                        Constants.text = "No text detected!";
                     }
                 }
             });

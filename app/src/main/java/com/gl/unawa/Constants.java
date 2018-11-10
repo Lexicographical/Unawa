@@ -2,6 +2,8 @@ package com.gl.unawa;
 
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.view.GestureDetector;
@@ -14,6 +16,7 @@ import com.gl.unawa.custom.AudioVisualizerView;
 import com.gl.unawa.custom.PortraitCameraBridgeViewBase;
 import com.gl.unawa.listeners.CVListener;
 import com.gl.unawa.listeners.STTListener;
+import com.gl.unawa.nn.ImageClassifierASL;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.MultiDetector;
 import com.google.android.gms.vision.text.TextRecognizer;
@@ -60,9 +63,24 @@ public class Constants {
     public static boolean paused = false;
 
 //    Sign Language
+    public static TextView subtitle;
     public static MultiDetector multiDetector;
-    public static int[] hsvBounds = {61, 235, 102, 245, 20, 245};
+    public static int[] hsvBounds_Green = {39, 97, 76, 174, 106, 255};
+    public static int[] hsvBounds_Red = {255, 255, 255, 255, 255, 255};
     public static PortraitCameraBridgeViewBase cameraBridgeViewBase;
     public static BaseLoaderCallback baseLoaderCallback;
-    public static boolean toggleSettings = false;
+    public static int settingsMode = 0;
+
+    public static final int SETTINGS_DISABLED = 0;
+    public static final int SETTINGS_OR = 1;
+    public static final int SETTINGS_GREEN = 2;
+    public static final int SETTINGS_RED = 3;
+
+    public static ImageClassifierASL classifier;
+    public static HandlerThread classifierThread;
+    public static Handler classifierHandler;
+    public static final Object classifierThreadLock = new Object();
+    public static boolean runClassifierThread = false;
+    public static final String CLASSIFIER_THREAD_NAME = "Unawa_Classifier_Thread";
+
 }

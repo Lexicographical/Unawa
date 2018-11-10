@@ -17,6 +17,10 @@ import org.opencv.android.OpenCVLoader;
 
 public class Utility {
 
+    public static void log(String tag, String message) {
+        Log.println(Log.ASSERT, tag, message);
+    }
+
     public static void requestPermissions(AppCompatActivity activity) {
         activity.requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, Constants.REQUEST_RECORD);
     }
