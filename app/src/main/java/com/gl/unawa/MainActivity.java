@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.i("MainActivity", "Permission denied! Request code: " + requestCode);
         }
-
-
     }
 
     @Override
@@ -77,11 +75,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Constants.gestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
+//    TODO: Uncomment to re-enable fling gesture
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        Constants.gestureDetector.onTouchEvent(event);
+//        return super.onTouchEvent(event);
+//    }
 
     @Override
     public void onPause() {

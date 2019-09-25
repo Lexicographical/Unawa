@@ -2,20 +2,18 @@ package com.gl.unawa.util;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +22,6 @@ import com.gl.unawa.Constants;
 import com.gl.unawa.EmptyTabFactory;
 import com.gl.unawa.R;
 import com.gl.unawa.listeners.CVListener;
-import com.gl.unawa.listeners.GestureListener;
 import com.gl.unawa.listeners.STTListener;
 import com.gl.unawa.nn.ImageClassifierASL;
 
@@ -36,81 +33,115 @@ import java.io.IOException;
 
 public class Util_Startup {
 
+    public static void animateStartup(Activity activity) {
+        final ImageView yellow = activity.findViewById(R.id.yellow);
+        final ConstraintLayout titleBg = activity.findViewById(R.id.titleBg);
+        titleBg.setVisibility(View.VISIBLE);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!Constants.STARTUP) {
+                    return;
+                }
+                yellow.animate().setDuration(1000).rotation(120).translationX(150).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        yellow.animate().setDuration(1000).rotation(240).translationY(130).setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animator) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                titleBg.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (!Constants.STARTUP) {
+                                                    return;
+                                                }
+                                                Constants.STARTUP = false;
+                                                titleBg.animate().setDuration(500).alpha(0).setListener(new Animator.AnimatorListener() {
+                                                    @Override
+                                                    public void onAnimationStart(Animator animator) {
+                                                    }
+
+                                                    @Override
+                                                    public void onAnimationEnd(Animator animator) {
+                                                        titleBg.setVisibility(View.GONE);
+                                                        titleBg.setAlpha(1);
+                                                        titleBg.setOnClickListener(null);
+
+                                                        yellow.setRotation(0);
+                                                        yellow.setTranslationX(0);
+                                                        yellow.setTranslationY(0);
+                                                        yellow.animate().setDuration(5).rotation(0).translationX(0).translationY(0).start();
+                                                        Log.i("Startup","Animation complete");
+                                                    }
+
+                                                    @Override
+                                                    public void onAnimationCancel(Animator animator) {
+                                                    }
+
+                                                    @Override
+                                                    public void onAnimationRepeat(Animator animator) {
+                                                    }
+                                                });
+                                            }
+                                        }, 100);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animator) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animator) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+                    }
+                });
+            }
+        }, 1000);
+    }
+
 
     public static void setupGUI(final Activity activity) {
 
-        final ImageView yellow = activity.findViewById(R.id.yellow);
-        final ConstraintLayout titleBg = activity.findViewById(R.id.titleBg);
-        if (Constants.STARTUP) {
-            Constants.STARTUP = false;
-            titleBg.setVisibility(View.VISIBLE);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    yellow.animate().setDuration(1000).rotation(120).translationX(150).setListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animator) {
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animator) {
-                            yellow.animate().setDuration(1000).rotation(240).translationY(130).setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            titleBg.animate().setDuration(500).alpha(0).setListener(new Animator.AnimatorListener() {
-                                                @Override
-                                                public void onAnimationStart(Animator animator) {
-                                                }
-
-                                                @Override
-                                                public void onAnimationEnd(Animator animator) {
-                                                    titleBg.setVisibility(View.GONE);
-                                                }
-
-                                                @Override
-                                                public void onAnimationCancel(Animator animator) {
-                                                }
-
-                                                @Override
-                                                public void onAnimationRepeat(Animator animator) {
-                                                }
-                                            });
-                                        }
-                                    }, 100);
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) {
-
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) {
-
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animator) {
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animator) {
-                        }
-                    });
-                }
-            }, 1000);
-        }
+        animateStartup(activity);
+        Constants.titleBar = activity.findViewById(R.id.titleBar);
+        Constants.titleBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Constants.STARTUP = true;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        animateStartup(activity);
+                    }
+                });
+            }
+        });
 
         Constants.tabHost = activity.findViewById(R.id.tabHost);
         Constants.tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
@@ -119,7 +150,7 @@ public class Util_Startup {
                 int old = Constants.TAB;
                 Log.i("MainActivity", "Tab changed!");
                 switch (s) {
-                    case "OCR":
+                    case "Read":
                         Constants.TAB = Constants.OCR;
                         break;
 
@@ -148,11 +179,25 @@ public class Util_Startup {
         Constants.cameraBridgeViewBase.disableView();
         Constants.cameraView = activity.findViewById(R.id.surface_view);
         Constants.subtitle = activity.findViewById(R.id.subtitle);
+        Constants.preview = activity.findViewById(R.id.letterPreview);
+        Constants.pref = activity.getPreferences(Context.MODE_PRIVATE);
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (i == 0) {
+                    Constants.hsvBounds_Red[j] = Constants.pref.getInt("red" + j, Constants.hsvBounds_Red[j]);
+                } else {
+                    Constants.hsvBounds_Green[j] = Constants.pref.getInt("green" + j, Constants.hsvBounds_Green[j]);
+                }
+            }
+        }
+
+        Log.i("Startup", "Done initializing bounds");
 
         Constants.tabHost = activity.findViewById(R.id.tabHost);
         Constants.tabHost.setup();
 
-        Constants.tabHost.addTab(Constants.tabHost.newTabSpec("OCR").setIndicator("OCR").setContent(new EmptyTabFactory(activity)));
+        Constants.tabHost.addTab(Constants.tabHost.newTabSpec("Read").setIndicator("Read").setContent(new EmptyTabFactory(activity)));
         Constants.tabHost.addTab(Constants.tabHost.newTabSpec("Sign").setIndicator("Sign").setContent(new EmptyTabFactory(activity)));
         Constants.tabHost.addTab(Constants.tabHost.newTabSpec("Listen").setIndicator("Listen").setContent(new EmptyTabFactory(activity)));
 
@@ -168,7 +213,8 @@ public class Util_Startup {
         Constants.recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
         Constants.recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
 
-        Constants.gestureDetector = new GestureDetector(activity, new GestureListener());
+//        TODO: Uncomment to return fling gesture
+//        Constants.gestureDetector = new GestureDetector(activity, new GestureListener());
 
         final ImageButton listenButton = activity.findViewById(R.id.startListen);
         listenButton.setOnClickListener(new View.OnClickListener() {
@@ -220,14 +266,19 @@ public class Util_Startup {
             range.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
                 @Override
                 public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                    Utility.log("RangeSeekBar", "Low: " + minValue + " High: " + maxValue);
+                    SharedPreferences.Editor editor = Constants.pref.edit();
                     if (Constants.settingsMode == Constants.SETTINGS_RED) {
                         Constants.hsvBounds_Red[2 * j] = minValue;
                         Constants.hsvBounds_Red[2 * j + 1] = maxValue;
+                        editor.putInt("red" + (2 * j), minValue);
+                        editor.putInt("red" + (2 * j + 1), maxValue);
                     } else if (Constants.settingsMode == Constants.SETTINGS_GREEN) {
                         Constants.hsvBounds_Green[2 * j] = minValue;
                         Constants.hsvBounds_Green[2 * j + 1] = maxValue;
+                        editor.putInt("green" + (2 * j), minValue);
+                        editor.putInt("green" + (2 * j + 1), maxValue);
                     }
+                    editor.apply();
                 }
             });
         }
@@ -256,6 +307,7 @@ public class Util_Startup {
 
                     }
                 });
+                Constants.subtitle.setText("");
                 Constants.settingsMode = (Constants.settingsMode + 1) % 3;
                 activity.findViewById(R.id.subtitle).setVisibility(Constants.settingsMode <= Constants.SETTINGS_OR ? View.VISIBLE : View.GONE);
                 activity.findViewById(R.id.sliderContainer).setVisibility(Constants.settingsMode >= Constants.SETTINGS_GREEN ? View.VISIBLE : View.GONE);

@@ -196,6 +196,7 @@ public abstract class ImageClassifier {
                 Constants.preview.setText("");
                 if (label.getValue() < Constants.EMPTY_PROB_THRESHOLD) {
                     Constants.emptyFrameCount++;
+                    Log.i("ImageClassifier", "empty count: " + Constants.emptyFrameCount);
                     if (Constants.emptyFrameCount >= Constants.frameThresh / 2) {
                         Constants.emptyFrameCount = 0;
                         Constants.subtitle.setText("");

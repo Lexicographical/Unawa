@@ -56,14 +56,32 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/letterPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/textBg"
+            android:fontFamily="sans-serif"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            android:paddingBottom="5sp"
+            app:layout_constraintBottom_toTopOf="@id/subtitle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
             android:id="@+id/subtitle"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:background="@color/textBg"
             android:fontFamily="sans-serif"
             android:maxLines="5"
-            android:paddingLeft="10dp"
-            android:textSize="16sp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/textColor"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
@@ -225,6 +243,7 @@
     </TabHost>
 
     <TextView
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/labelBackground"

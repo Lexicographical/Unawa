@@ -12,6 +12,6 @@
     <color name="textColor">#000</color>
     <color name="tabBg">#fff</color>
     <color name="tabFocus">#b9f6ca</color>
-    <color name="textBg">#bdbdbd</color>
+    <color name="textBg">#fff</color>
     <color name="sliderBg">#ffffff</color>
 </resources>

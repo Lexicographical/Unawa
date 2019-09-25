@@ -2,6 +2,7 @@ package com.gl.unawa;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.speech.SpeechRecognizer;
@@ -31,8 +32,6 @@ import org.opencv.android.JavaCameraView;
 
 public class Constants {
 
-    public static boolean STARTUP = true;
-    public static boolean isListening = false;
     public static final int REQUEST_RECORD = 10;
     public static final int REQUEST_CAMERA = 1;
     public static int TAB = 1;
@@ -41,6 +40,11 @@ public class Constants {
     public static final int OCR = 1;
     public static final int SIGN = 2;
     public static final int LISTEN = 4;
+
+    public static boolean STARTUP = true;
+
+    public static SharedPreferences pref;
+    public static TextView titleBar;
 
     //    Generic Views
     public static TextView listenText;
@@ -52,6 +56,7 @@ public class Constants {
     public static Intent recognizerIntent;
     public static STTListener listener;
     public static AudioVisualizerView avv;
+    public static boolean isListening = false;
 
     //    OCR_TTS
     public static SurfaceView cameraView;
@@ -62,10 +67,14 @@ public class Constants {
     public static boolean startup = true;
     public static boolean paused = false;
 
-//    Sign Language
+    //    Sign Language
     public static TextView subtitle;
+    public static TextView preview;
     public static MultiDetector multiDetector;
-    public static int[] hsvBounds_Green = {39, 97, 76, 174, 106, 255};
+    //    gloves
+//    public static int[] hsvBounds_Green = {39, 97, 76, 174, 106, 255};
+//    hand
+    public static int[] hsvBounds_Green = {54, 88, 144, 255, 47, 255};
     public static int[] hsvBounds_Red = {255, 255, 255, 255, 255, 255};
     public static PortraitCameraBridgeViewBase cameraBridgeViewBase;
     public static BaseLoaderCallback baseLoaderCallback;
@@ -76,11 +85,14 @@ public class Constants {
     public static final int SETTINGS_GREEN = 2;
     public static final int SETTINGS_RED = 3;
 
+    public static final float GOOD_PROB_THRESHOLD = 0.15f;
+    public static final float EMPTY_PROB_THRESHOLD = 0.03f;
+
     public static ImageClassifierASL classifier;
-    public static HandlerThread classifierThread;
-    public static Handler classifierHandler;
-    public static final Object classifierThreadLock = new Object();
-    public static boolean runClassifierThread = false;
-    public static final String CLASSIFIER_THREAD_NAME = "Unawa_Classifier_Thread";
+    public static String letterCache = "A";
+    public static int letterFrameCount = 0;
+    public static int emptyFrameCount = 0;
+    public static final int frameThresh = 15;
+    public static StringBuilder wordBuilder = new StringBuilder();
 
 }
